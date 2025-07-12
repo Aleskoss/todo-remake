@@ -11,10 +11,3 @@ export class ToDo{
   }
 }
 
-const completer = {
-  removeToDo(project){
-  }
-}
-
-
-

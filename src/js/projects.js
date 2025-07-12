@@ -23,14 +23,14 @@ const adder = {
   }
 }
 
-const opener = {
+const finder = {
   currentProject(project){
     const indexOfProject = projects.getProjects().reduce((accumulator,currentValue) => {
       if(currentValue.title === project){
         accumulator = projects.getProjects().indexOf(currentValue)
       }
       return accumulator
-    })
+    },0)
     const currentOpenedProject = projects.getProjects()[indexOfProject]
     return currentOpenedProject
   },
@@ -40,11 +40,20 @@ const opener = {
         accumulator = projects.currentProject(project).todos.indexOf(currentValue)
       }
       return accumulator
-    })
+    },0)
     const toDo = projects.currentProject(project).todos[indexOfTodo]
     return toDo
   }
 }
 
+const completer = {
+  completeToDo(project,todo){
+    const indexOfToDo = projects.currentProject(project).todos.indexOf(projects.currentProject(project).currentToDo(project,todo))
+    projects.currentProject(project).todos.splice(indexOfToDo,1)
+  }
+}
+
+
+Object.assign(projects,completer)
 Object.assign(projects,adder)
-Object.assign(projects,opener)
+Object.assign(projects,finder)
