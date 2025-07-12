@@ -7,6 +7,12 @@ export class ToDo{
     this.description = description 
     this.dueDate = ""
     this.priority = priority
+    this.id = crypto.randomUUID()
+  }
+}
+
+const completer = {
+  removeToDo(project){
   }
 }
 
