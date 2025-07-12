@@ -6,4 +6,5 @@ projects.addProjectToProjects("Hello")
 projects.addToDoToProject(projects.currentProject("Default"),"title","description","dueDate","priority")
 console.log(projects.getProjects())
 dom.loadProjects()
+dom.loadTodos('Default')
 
