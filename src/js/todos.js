@@ -1,5 +1,3 @@
-import { projects } from "./projects"
-
 export class ToDo{
   constructor(title,description,priority){
     this.checklist = ""
