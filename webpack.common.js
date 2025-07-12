@@ -3,7 +3,7 @@
 
  module.exports = {
    entry: {
-     app: './src/index.js',
+     app: './src/js/index.js',
    },
    plugins: [
      new HtmlWebpackPlugin({
