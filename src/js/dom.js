@@ -8,6 +8,9 @@ export const dom = (() => {
   const dialog = document.createElement('dialog')
   const loadProjects = () => {
     deleteContainerContent(projectsDiv)
+    const header = document.createElement('h5')
+    header.textContent = 'Projekty'
+    projectsDiv.appendChild(header)
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
       const div = document.createElement('div')
@@ -29,7 +32,6 @@ export const dom = (() => {
   }
   const loadTodos = (project) => {
     deleteContainerContent(todosDiv)
-    addTodoBtn()
     const todosLength = projects.currentProject(project).todos.length
     for(let i = 0; i < todosLength; i++){
       const form = document.createElement('form')
@@ -60,7 +62,7 @@ export const dom = (() => {
       dueDate.name = 'dueDate'
       dueDate.value = projects.currentProject(project).todos[i].dueDate
       if(isPast(dueDate.value)){
-        dueDate.style.color = 'red'
+        dueDate.style.color = '#EF4444'
       }else{
         dueDate.style.color = 'green'
       }
@@ -90,6 +92,7 @@ export const dom = (() => {
       form.appendChild(deleteBtn)
       todosDiv.appendChild(form)
     }
+    addTodoBtn()
   }
   const addProjectBtn = () => {
     const btn = document.createElement('button')
@@ -101,15 +104,27 @@ export const dom = (() => {
     document.body.appendChild(dialog)
     const addProjectBtn = document.createElement('button')
     addProjectBtn.textContent = 'Add'
+    addProjectBtn.type = 'submit'
+    const form = document.createElement('form')
     const projectTitle = document.createElement('input')
-    dialog.appendChild(projectTitle)
-    dialog.appendChild(addProjectBtn)
+    projectTitle.type = 'text'
+    projectTitle.name = 'project-title'
+    projectTitle.required = true
+    form.appendChild(projectTitle)
+    form.appendChild(addProjectBtn)
+    dialog.appendChild(form)
     dialog.showModal()
-    addProjectBtn.addEventListener('click', () => {
-      projects.addProjectToProjects(projectTitle.value)
-      deleteContainerContent(dialog)
-      loadProjects()
-      dialog.close()
+    form.addEventListener('submit', (event) => {
+      console.log(projects.getProjects())
+      if(!(projects.checkIfValueIsInProject(projectTitle.value))){
+        projects.addProjectToProjects(projectTitle.value)
+        deleteContainerContent(dialog)
+        loadProjects()
+        dialog.close()
+      }else{
+        projectTitle.value = 'Input original value'
+      }
+      event.preventDefault()
     })
   }
   const deleteContainerContent = (container) => {
@@ -126,18 +141,22 @@ export const dom = (() => {
   const addTodoDialogDisplay = () => {
     const addTodoBtn = document.createElement('button')
     addTodoBtn.textContent = 'Add'
+    addTodoBtn.type = 'submit'
     const title = document.createElement('input')
+    title.required = true
     const description = document.createElement('input')
     const dueDate = document.createElement('input')
+    const form = document.createElement('form')
     dueDate.value = ToDo.getCurrentDay()
     dueDate.type = 'date'
-    dialog.appendChild(title)
-    dialog.appendChild(description)
-    dialog.appendChild(dueDate)
-    dialog.appendChild(addTodoBtn)
+    form.appendChild(title)
+    form.appendChild(description)
+    form.appendChild(dueDate)
+    form.appendChild(addTodoBtn)
+    dialog.appendChild(form)
     document.body.appendChild(dialog)
     dialog.showModal()
-    addTodoBtn.addEventListener('click',() => {
+    form.addEventListener('submit',() => {
       projects.addToDoToProject(projects.currentProject(currentProject),title.value,description.value,dueDate.value)
       deleteContainerContent(dialog)
       loadTodos(currentProject)
