@@ -1,6 +1,8 @@
+import { getLocalStorage } from "./local-storage"
 import { ToDo } from "./todos"
+
 export const projects = (() => {
-  const project = []
+  const project = getLocalStorage('projects') || []
   const getProjects = () => {
     return project
   }

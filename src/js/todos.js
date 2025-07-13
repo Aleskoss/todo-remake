@@ -1,5 +1,6 @@
-import { projects } from "./projects"
 import { dateSetter } from "./date-manipulator"
+import { projects } from "./projects"
+
 export class ToDo{
   constructor(title,description,dueDate){
     this.checklist = false
