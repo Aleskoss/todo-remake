@@ -10,11 +10,20 @@ export const dom = (() => {
     deleteContainerContent(projectsDiv)
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
+      const div = document.createElement('div')
       let projectTitle = projects.getProjects()[i].title
       const para = document.createElement('p')
       para.id = projectTitle
       para.textContent = projectTitle
-      projectsDiv.appendChild(para)
+      const removeBtn = document.createElement('button')
+      removeBtn.textContent = 'x'
+      removeBtn.addEventListener('click', () => {
+        div.parentElement.removeChild(div)
+        projects.removeProject(para.textContent)
+      })
+      div.appendChild(para)
+      div.appendChild(removeBtn)
+      projectsDiv.appendChild(div)
     }
     addProjectBtn()
   }

@@ -24,6 +24,15 @@ const adder = {
   }
 }
 const finder = {
+  findProjectIndex(project){
+    const indexOfProject = projects.getProjects().reduce((accumulator,currentValue) => {
+      if(currentValue.title === project){
+        accumulator = projects.getProjects().indexOf(currentValue)
+      }
+      return accumulator
+    },0)
+    return indexOfProject
+  },
   currentProject(project){
     const indexOfProject = projects.getProjects().reduce((accumulator,currentValue) => {
       if(currentValue.title === project){
@@ -68,10 +77,15 @@ const sorter = {
     })
   }
 }
-
+const remover = {
+  removeProject(project){
+    projects.getProjects().splice(projects.findProjectIndex(project),1)
+  }
+}
 
 Object.assign(projects,completer)
 Object.assign(projects,adder)
 Object.assign(projects,finder)
 Object.assign(projects,checker)
 Object.assign(projects,sorter)
+Object.assign(projects,remover)
