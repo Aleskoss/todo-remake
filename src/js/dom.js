@@ -1,9 +1,10 @@
 import { projects } from "./projects"
+import { ToDo } from "./todos"
 export const dom = (() => {
+  let currentProject
   const projectsDiv = document.querySelector('#projects')
   const todosDiv = document.querySelector('#todos')
   const dialog = document.createElement('dialog')
-  let currentProject = 'Default'
   const loadProjects = () => {
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
@@ -21,26 +22,47 @@ export const dom = (() => {
     const todosLength = projects.currentProject(project).todos.length
     for(let i = 0; i < todosLength; i++){
       const form = document.createElement('form')
+      form.id = projects.currentProject(project).todos[i].id
+      form.addEventListener('change', (event) => {
+        if(event.target.name === 'checklist'){
+          ToDo.saveEditTodo(currentProject,event.target.parentElement.id,event.target.name,event.target.checked)
+          loadTodos(currentProject)
+        }else{
+          ToDo.saveEditTodo(currentProject,event.target.parentElement.id,event.target.name,event.target.value)
+          loadTodos(currentProject)
+        }
+        if(event.target.name === 'priority'){
+          projects.sortyByPriority(currentProject)
+          loadTodos(currentProject)
+        }
+      })
       const checkbox = document.createElement('input')
       checkbox.type = 'checkbox'
+      checkbox.name = 'checklist'
+      checkbox.checked = projects.currentProject(project).todos[i].checklist
       const description = document.createElement('input')
       description.type = 'text'
-      description.value = `${projects.currentProject(project).todos[i].description}`
+      description.name = 'description'
+      description.value = projects.currentProject(project).todos[i].description
       const dueDate = document.createElement('input')
       dueDate.type = 'date'
+      dueDate.name = 'dueDate'
+      dueDate.value = projects.currentProject(project).todos[i].dueDate
       const title = document.createElement('input')
-      title.type = 'title'
+      title.type = 'text'
+      title.name = 'title'
       title.value = projects.currentProject(project).todos[i].title
       const priority = document.createElement('input')
       priority.type = 'number'
+      priority.name = 'priority'
+      priority.value = projects.currentProject(project).todos[i].priority
       priority.max = 3
       priority.min = 1
       const deleteBtn = document.createElement('button')
       deleteBtn.textContent = 'Delete'
-      deleteBtn.id = projects.currentProject(project).todos[i].id
       deleteBtn.addEventListener('click',event => {
         todosDiv.removeChild(event.target.parentElement)
-        projects.completeToDo(currentProject,event.target.id)
+        projects.completeToDo(currentProject,event.target.parentElement.id)
         loadTodos(currentProject)
         console.log(projects.getProjects())
       })
@@ -89,19 +111,23 @@ export const dom = (() => {
     addTodoBtn.textContent = 'Add'
     const title = document.createElement('input')
     const description = document.createElement('input')
+    const dueDate = document.createElement('input')
+    dueDate.type = 'date'
     dialog.appendChild(title)
     dialog.appendChild(description)
+    dialog.appendChild(dueDate)
     dialog.appendChild(addTodoBtn)
     document.body.appendChild(dialog)
     dialog.showModal()
     addTodoBtn.addEventListener('click',() => {
-      projects.addToDoToProject(projects.currentProject(currentProject),title.value,description.value,"dueDate","priority")
+      projects.addToDoToProject(projects.currentProject(currentProject),title.value,description.value,dueDate.value)
       deleteContainerContent(dialog)
       loadTodos(currentProject)
       dialog.close()
     })
   }
   const init = () => {
+    currentProject = 'Default'
     loadProjects()
     loadTodos(currentProject)
     document.addEventListener('click', event => {

@@ -1,1 +1,2 @@
 # template-repo
+This is me remaking my original project since first ones code was a mess and it wasn`t really abiding by the SOLID principles, in this one I try to make the code more composition like with abiding by SOLID principles

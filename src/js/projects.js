@@ -32,15 +32,14 @@ const finder = {
     const currentOpenedProject = projects.getProjects()[indexOfProject]
     return currentOpenedProject
   },
-  currentToDo(project,todo){
+  currentToDoIndex(project,todo){
     const indexOfTodo = projects.currentProject(project).todos.reduce((accumulator,currentValue) => {
       if(currentValue.id === todo){
         accumulator = projects.currentProject(project).todos.indexOf(currentValue)
       }
       return accumulator
     },0)
-    const toDo = projects.currentProject(project).todos[indexOfTodo]
-    return toDo
+    return indexOfTodo
   }
 }
 const checker = {
@@ -56,12 +55,16 @@ const checker = {
 }
 const completer = {
   completeToDo(project,todo){
-    const indexOfToDo = projects.currentToDo(project,todo)
+    const indexOfToDo = projects.currentToDoIndex(project,todo)
     projects.currentProject(project).todos.splice(indexOfToDo,1)
   }
 }
-const arranger = {
-  sortByPriority(){}
+const sorter = {
+  sortyByPriority(project){
+    projects.currentProject(project).todos.sort((a,b) => {
+      return b.priority - a.priority
+    })
+  }
 }
 
 
@@ -69,3 +72,4 @@ Object.assign(projects,completer)
 Object.assign(projects,adder)
 Object.assign(projects,finder)
 Object.assign(projects,checker)
+Object.assign(projects,sorter)
