@@ -3,15 +3,17 @@ export const dom = (() => {
   const projectsDiv = document.querySelector('#projects')
   const todosDiv = document.querySelector('#todos')
   const dialog = document.createElement('dialog')
+  let currentProject = 'Default'
   const loadProjects = (project) => {
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
+      let projectTitle = projects.getProjects()[i].title
       const para = document.createElement('p')
-      para.textContent = projects.getProjects()[i].title
+      para.id = projectTitle
+      para.textContent = projectTitle
       projectsDiv.appendChild(para)
     }
     addProjectBtn()
-    addTodoBtn()
   }
   const loadTodos = (project) => {
     deleteContainerContent(todosDiv)
@@ -89,5 +91,17 @@ export const dom = (() => {
       dialog.close()
     })
   }
-    return {loadProjects,loadTodos,addProjectBtn}
+  const init = () => {
+    loadProjects()
+    loadTodos(currentProject)
+    document.addEventListener('click', event => {
+      let target = event.target
+      console.log(projects.checkIfValueIsInProject(target.id))
+      if(projects.checkIfValueIsInProject(target.id)){
+        currentProject = target.id
+        loadTodos(currentProject)
+      }
+    })
+  }
+    return {init}
 })()

@@ -45,7 +45,17 @@ const finder = {
     return toDo
   }
 }
-
+const checker = {
+  checkIfValueIsInProject(value){
+    const valueCheck = projects.getProjects().reduce((accumulator,currentValue) => {
+      if(currentValue.title === value){
+        accumulator = true
+      }
+      return accumulator
+    },false)
+    return valueCheck
+  }
+}
 const completer = {
   completeToDo(project,todo){
     const indexOfToDo = projects.currentProject(project).todos.indexOf(projects.currentProject(project).currentToDo(project,todo))
@@ -57,3 +67,4 @@ const completer = {
 Object.assign(projects,completer)
 Object.assign(projects,adder)
 Object.assign(projects,finder)
+Object.assign(projects,checker)
