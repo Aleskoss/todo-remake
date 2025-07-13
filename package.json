@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "clean": "rm -rf dist/",
     "install-dev-dependencies": "npm install --save-dev webpack webpack-cli webpack-dev-server webpack-merge style-loader css-loader html-loader html-webpack-plugin",
-    "deploy": "git checkout -b gh-pages && git merge main --no-edit && git add dist -f && git commit -m 'Deployment commit' && git subtree push --prefix dist origin gh-pages"
+    "deploy": "git checkout gh-pages && git merge main --no-edit && git add dist -f && git commit -m 'Deployment commit' && git subtree push --prefix dist origin gh-pages"
   },
   "repository": {
     "type": "git",
