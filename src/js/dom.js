@@ -4,7 +4,7 @@ export const dom = (() => {
   const todosDiv = document.querySelector('#todos')
   const dialog = document.createElement('dialog')
   let currentProject = 'Default'
-  const loadProjects = (project) => {
+  const loadProjects = () => {
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
       let projectTitle = projects.getProjects()[i].title
@@ -23,23 +23,33 @@ export const dom = (() => {
       const form = document.createElement('form')
       const checkbox = document.createElement('input')
       checkbox.type = 'checkbox'
-      form.appendChild(checkbox)
       const description = document.createElement('input')
       description.type = 'text'
       description.value = `${projects.currentProject(project).todos[i].description}`
-      form.appendChild(description)
       const dueDate = document.createElement('input')
       dueDate.type = 'date'
-      form.appendChild(dueDate)
       const title = document.createElement('input')
       title.type = 'title'
       title.value = projects.currentProject(project).todos[i].title
-      form.appendChild(title)
       const priority = document.createElement('input')
       priority.type = 'number'
       priority.max = 3
       priority.min = 1
+      const deleteBtn = document.createElement('button')
+      deleteBtn.textContent = 'Delete'
+      deleteBtn.id = projects.currentProject(project).todos[i].id
+      deleteBtn.addEventListener('click',event => {
+        todosDiv.removeChild(event.target.parentElement)
+        projects.completeToDo(currentProject,event.target.id)
+        loadTodos(currentProject)
+        console.log(projects.getProjects())
+      })
+      form.appendChild(checkbox)
+      form.appendChild(title)
+      form.appendChild(description)
+      form.appendChild(dueDate)
       form.appendChild(priority)
+      form.appendChild(deleteBtn)
       todosDiv.appendChild(form)
     }
   }
@@ -68,7 +78,7 @@ export const dom = (() => {
       container.removeChild(container.lastChild)
     }
   }
-  const addTodoBtn = (project) => {
+  const addTodoBtn = () => {
     const btn = document.createElement('button')
     btn.textContent = '+'
     todosDiv.appendChild(btn)
@@ -85,9 +95,9 @@ export const dom = (() => {
     document.body.appendChild(dialog)
     dialog.showModal()
     addTodoBtn.addEventListener('click',() => {
-      projects.addToDoToProject(projects.currentProject("Default"),title.value,description.value,"dueDate","priority")
+      projects.addToDoToProject(projects.currentProject(currentProject),title.value,description.value,"dueDate","priority")
       deleteContainerContent(dialog)
-      loadTodos('Default')
+      loadTodos(currentProject)
       dialog.close()
     })
   }
@@ -96,7 +106,6 @@ export const dom = (() => {
     loadTodos(currentProject)
     document.addEventListener('click', event => {
       let target = event.target
-      console.log(projects.checkIfValueIsInProject(target.id))
       if(projects.checkIfValueIsInProject(target.id)){
         currentProject = target.id
         loadTodos(currentProject)

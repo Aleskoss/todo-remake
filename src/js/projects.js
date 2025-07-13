@@ -13,7 +13,6 @@ class Project{
     this.todos = []
   }
 }
-
 const adder = {
   addProjectToProjects(title){
     projects.getProjects().push(new Project(title))
@@ -22,7 +21,6 @@ const adder = {
     project.todos.push(new ToDo(title,description,dueDate,priority))
   }
 }
-
 const finder = {
   currentProject(project){
     const indexOfProject = projects.getProjects().reduce((accumulator,currentValue) => {
@@ -35,7 +33,7 @@ const finder = {
     return currentOpenedProject
   },
   currentToDo(project,todo){
-    indexOfTodo = projects.currentProject(project).todos.reduce((accumulator,currentValue) => {
+    const indexOfTodo = projects.currentProject(project).todos.reduce((accumulator,currentValue) => {
       if(currentValue.id === todo){
         accumulator = projects.currentProject(project).todos.indexOf(currentValue)
       }
@@ -58,9 +56,12 @@ const checker = {
 }
 const completer = {
   completeToDo(project,todo){
-    const indexOfToDo = projects.currentProject(project).todos.indexOf(projects.currentProject(project).currentToDo(project,todo))
+    const indexOfToDo = projects.currentToDo(project,todo)
     projects.currentProject(project).todos.splice(indexOfToDo,1)
   }
+}
+const arranger = {
+  sortByPriority(){}
 }
 
 
