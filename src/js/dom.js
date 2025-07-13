@@ -1,11 +1,13 @@
 import { projects } from "./projects"
 import { ToDo } from "./todos"
+import { isPast } from "date-fns"
 export const dom = (() => {
   let currentProject
   const projectsDiv = document.querySelector('#projects')
   const todosDiv = document.querySelector('#todos')
   const dialog = document.createElement('dialog')
   const loadProjects = () => {
+    deleteContainerContent(projectsDiv)
     const projectsLength = projects.getProjects().length
     for(let i = 0; i < projectsLength; i++){
       let projectTitle = projects.getProjects()[i].title
@@ -48,6 +50,11 @@ export const dom = (() => {
       dueDate.type = 'date'
       dueDate.name = 'dueDate'
       dueDate.value = projects.currentProject(project).todos[i].dueDate
+      if(isPast(dueDate.value)){
+        dueDate.style.color = 'red'
+      }else{
+        dueDate.style.color = 'green'
+      }
       const title = document.createElement('input')
       title.type = 'text'
       title.name = 'title'
@@ -92,6 +99,7 @@ export const dom = (() => {
     addProjectBtn.addEventListener('click', () => {
       projects.addProjectToProjects(projectTitle.value)
       deleteContainerContent(dialog)
+      loadProjects()
       dialog.close()
     })
   }
@@ -112,6 +120,7 @@ export const dom = (() => {
     const title = document.createElement('input')
     const description = document.createElement('input')
     const dueDate = document.createElement('input')
+    dueDate.value = ToDo.getCurrentDay()
     dueDate.type = 'date'
     dialog.appendChild(title)
     dialog.appendChild(description)

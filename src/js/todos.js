@@ -1,4 +1,5 @@
 import { projects } from "./projects"
+import { dateSetter } from "./date-manipulator"
 export class ToDo{
   constructor(title,description,dueDate){
     this.checklist = false
@@ -18,3 +19,4 @@ const saver = {
 }
 
 Object.assign(ToDo,saver)
+Object.assign(ToDo,dateSetter)
