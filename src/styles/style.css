@@ -100,7 +100,7 @@ header{
 #todos > form{
   margin-bottom: 8px;
 }
-#todos > form > input{
+#todos > form > input:nth-child(n + 2){
   appearance: none;
   border:none;
   border-bottom: 1px solid black;

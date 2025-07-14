@@ -32,35 +32,35 @@ export const dom = (() => {
   }
   const loadTodos = (project) => {
     deleteContainerContent(todosDiv)
-    const todosLength = projects.currentProject(project).todos.length
+    const todosLength = project.todos.length
     for(let i = 0; i < todosLength; i++){
       const form = document.createElement('form')
-      form.id = projects.currentProject(project).todos[i].id
+      form.id = project.todos[i].id
       form.addEventListener('change', (event) => {
         if(event.target.name === 'checklist'){
           ToDo.saveEditTodo(currentProject,event.target.parentElement.id,event.target.name,event.target.checked)
-          loadTodos(currentProject)
+          loadTodos(projects.currentProject(currentProject))
         }else{
           ToDo.saveEditTodo(currentProject,event.target.parentElement.id,event.target.name,event.target.value)
-          loadTodos(currentProject)
+          loadTodos(projects.currentProject(currentProject))
         }
         if(event.target.name === 'priority'){
           projects.sortyByPriority(currentProject)
-          loadTodos(currentProject)
+          loadTodos(projects.currentProject(currentProject))
         }
       })
       const checkbox = document.createElement('input')
       checkbox.type = 'checkbox'
       checkbox.name = 'checklist'
-      checkbox.checked = projects.currentProject(project).todos[i].checklist
+      checkbox.checked = project.todos[i].checklist
       const description = document.createElement('input')
       description.type = 'text'
       description.name = 'description'
-      description.value = projects.currentProject(project).todos[i].description
+      description.value = project.todos[i].description
       const dueDate = document.createElement('input')
       dueDate.type = 'date'
       dueDate.name = 'dueDate'
-      dueDate.value = projects.currentProject(project).todos[i].dueDate
+      dueDate.value = project.todos[i].dueDate
       if(isPast(dueDate.value)){
         dueDate.style.color = '#EF4444'
       }else{
@@ -69,11 +69,11 @@ export const dom = (() => {
       const title = document.createElement('input')
       title.type = 'text'
       title.name = 'title'
-      title.value = projects.currentProject(project).todos[i].title
+      title.value = project.todos[i].title
       const priority = document.createElement('input')
       priority.type = 'number'
       priority.name = 'priority'
-      priority.value = projects.currentProject(project).todos[i].priority
+      priority.value = project.todos[i].priority
       priority.max = 3
       priority.min = 1
       const deleteBtn = document.createElement('button')
@@ -81,7 +81,7 @@ export const dom = (() => {
       deleteBtn.addEventListener('click',event => {
         todosDiv.removeChild(event.target.parentElement)
         projects.completeToDo(currentProject,event.target.parentElement.id)
-        loadTodos(currentProject)
+        loadTodos(projects.currentProject(currentProject))
         console.log(projects.getProjects())
       })
       form.appendChild(checkbox)
@@ -159,19 +159,19 @@ export const dom = (() => {
     form.addEventListener('submit',() => {
       projects.addToDoToProject(projects.currentProject(currentProject),title.value,description.value,dueDate.value)
       deleteContainerContent(dialog)
-      loadTodos(currentProject)
+      loadTodos(projects.currentProject(currentProject))
       dialog.close()
     })
   }
   const init = () => {
     currentProject = 'Default'
     loadProjects()
-    loadTodos(currentProject)
+    loadTodos(projects.getTodaysTodos())
     document.addEventListener('click', event => {
       let target = event.target
       if(projects.checkIfValueIsInProject(target.id)){
         currentProject = target.id
-        loadTodos(currentProject)
+        loadTodos(projects.currentProject(currentProject))
       }
     })
   }

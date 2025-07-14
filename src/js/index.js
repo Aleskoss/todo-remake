@@ -4,7 +4,7 @@ import { dom } from './dom'
 import { setLocalStorage} from './local-storage'
 if(projects.getProjects().length === 0){projects.addProjectToProjects("Default")}
 dom.init()
-console.log(projects.getProjects())
+console.log(projects.getTodaysTodos())
 window.addEventListener('beforeunload',(event) => {
   setLocalStorage('projects',projects.getProjects())
 })

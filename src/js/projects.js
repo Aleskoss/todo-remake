@@ -51,6 +51,18 @@ const finder = {
       return accumulator
     },0)
     return indexOfTodo
+  },
+  getTodaysTodos(){
+    const todaysTodos = {
+      title: "Dnes",
+      todos: []
+    }
+    projects.getProjects().map(item => item.todos.map(item => {
+      if(item.dueDate === ToDo.getCurrentDay()){
+        todaysTodos.todos.push(item)
+      }
+    }))
+    return todaysTodos
   }
 }
 const checker = {
